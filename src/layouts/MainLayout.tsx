@@ -1,6 +1,6 @@
 import Header from "@/components/Header";
-import Sidebar from "@/components/SideBar";
-import { Box, Container, Stack, useDisclosure } from "@chakra-ui/react";
+import Sidebar from "@/components/Sidebar";
+import { Box, useDisclosure } from "@chakra-ui/react";
 import type { ReactNode } from "react";
 
 interface MainLayoutProps {
