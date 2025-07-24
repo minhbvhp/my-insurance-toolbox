@@ -12,8 +12,11 @@ function App() {
       <BrowserRouter>
         <MainLayout>
           <Routes>
-            <Route path="/" element={<DashboardPage />} />
-            <Route path="/settings" element={<SettingsPage />} />
+            <Route path="/my-insurance-toolbox" element={<DashboardPage />} />
+            <Route
+              path="/my-insurance-toolbox/settings"
+              element={<SettingsPage />}
+            />
           </Routes>
         </MainLayout>
       </BrowserRouter>

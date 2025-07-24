@@ -2,8 +2,8 @@ import { Box, Drawer, Link, Portal, Text, VStack } from "@chakra-ui/react";
 import { useLocation } from "react-router-dom";
 
 const navItems = [
-  { label: "Dashboard", path: "/" },
-  { label: "Settings", path: "/settings" },
+  { label: "Dashboard", path: "/my-insurance-toolbox" },
+  { label: "Settings", path: "/my-insurance-toolbox/settings" },
 ];
 
 interface SidebarProps {
