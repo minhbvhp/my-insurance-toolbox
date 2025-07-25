@@ -1,15 +1,15 @@
+import MainLayout from "@/layouts/MainLayout";
 import DashboardPage from "@/pages/DashboardPage";
 import SettingsPage from "@/pages/SettingsPage";
 import theme from "@/theme";
 import { ChakraProvider } from "@chakra-ui/react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HashRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
-import MainLayout from "@/layouts/MainLayout";
 
 function App() {
   return (
     <ChakraProvider value={theme}>
-      <BrowserRouter>
+      <HashRouter>
         <MainLayout>
           <Routes>
             <Route path="/my-insurance-toolbox" element={<DashboardPage />} />
@@ -19,7 +19,7 @@ function App() {
             />
           </Routes>
         </MainLayout>
-      </BrowserRouter>
+      </HashRouter>
     </ChakraProvider>
   );
 }
