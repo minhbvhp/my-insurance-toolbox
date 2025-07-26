@@ -3,7 +3,7 @@ import { capitalizeFirstLetter } from "@/utils/helper";
 import { readEnglishNumber } from "@/utils/read-english-number";
 import { readUSDInEnglish } from "@/utils/read-usd-in-english";
 import { readVietnameseNumber } from "@/utils/read-vietnamese-number";
-import { Card, Grid, InputGroup, NumberInput, Stack } from "@chakra-ui/react";
+import { Card, Grid, InputGroup, NumberInput } from "@chakra-ui/react";
 import { useState } from "react";
 
 export default function NumberToTextPage() {
