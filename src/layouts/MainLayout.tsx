@@ -11,11 +11,13 @@ export default function MainLayout({ children }: MainLayoutProps) {
   const { open, onOpen, onClose } = useDisclosure();
 
   return (
-    <Box bg="gray.50" height="100vh" w={"full"}>
+    <Box height="100vh" w={"full"}>
       <Sidebar isOpen={open} onClose={onClose} />
       <Box pl={{ base: 0, md: 60 }}>
         <Header onOpen={onOpen} />
-        <Box p={4}>{children}</Box>
+        <Box p={{ base: 10, md: 24 }} pl={{ md: 60 }}>
+          {children}
+        </Box>
       </Box>
     </Box>
   );

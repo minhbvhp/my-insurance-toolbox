@@ -12,7 +12,7 @@ export default function Header({ onOpen }: HeaderProps) {
       bg="white"
       borderBottom="1px solid"
       borderColor="gray.200"
-      justify="space-between"
+      justify="end"
       h="16"
       display={{ base: "flex", md: "none" }}
     >
@@ -21,7 +21,7 @@ export default function Header({ onOpen }: HeaderProps) {
         onClick={onOpen}
         aria-label="Open menu"
         display={{ base: "inline-flex", md: "none" }}
-        ml={2}
+        mr={4}
       >
         <FiMenu />
       </Button>

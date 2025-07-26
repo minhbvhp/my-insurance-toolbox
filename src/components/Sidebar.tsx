@@ -7,8 +7,9 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { useLocation } from "react-router-dom";
+import { RxGithubLogo } from "react-icons/rx";
 import { SiConvertio, SiGitextensions } from "react-icons/si";
+import { useLocation } from "react-router-dom";
 
 const navItems = [
   {
@@ -45,9 +46,13 @@ function SidebarContent() {
             key={item.path}
             p={2}
             borderRadius="md"
+            focusRing={"none"}
             bg={isActive ? "primary.300" : "transparent"}
             color={isActive ? "white" : "primary.500"}
-            _hover={{ bg: "primary.50", textDecoration: "none" }}
+            _hover={{
+              bg: isActive ? "primary.300" : "primary.50",
+              textDecoration: "none",
+            }}
           >
             <Icon size="sm">{item.icon}</Icon>
             <Text fontWeight={isActive ? "medium" : "normal"}>
@@ -80,15 +85,27 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
       </Drawer.Root>
 
       {/* Desktop Sidebar */}
+
       <Box
-        w="60"
-        bg="white"
+        w="96"
+        bg="gray.100"
         borderRight="1px solid"
-        borderColor="primary.100"
+        borderColor="blackAlpha.100"
         pos="fixed"
         h="full"
         display={{ base: "none", md: "block" }}
+        pt={8}
       >
+        <a
+          href="https://github.com/minhbvhp"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Icon size={"lg"} color={"primary.500"} mb={4} animation={"bounce"}>
+            <RxGithubLogo />
+          </Icon>
+        </a>
+
         <SidebarContent />
       </Box>
     </>
