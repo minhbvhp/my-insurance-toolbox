@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 
 const navItems = [
   { label: "Dashboard", path: "/my-insurance-toolbox" },
-  { label: "Settings", path: "/my-insurance-toolbox/settings" },
+  { label: "Settings", path: "/my-insurance-toolbox/#/settings" },
 ];
 
 interface SidebarProps {
