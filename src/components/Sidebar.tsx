@@ -1,9 +1,26 @@
-import { Box, Drawer, Link, Portal, Text, VStack } from "@chakra-ui/react";
+import {
+  Box,
+  Drawer,
+  Icon,
+  Link,
+  Portal,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 import { useLocation } from "react-router-dom";
+import { SiConvertio, SiGitextensions } from "react-icons/si";
 
 const navItems = [
-  { label: "Dashboard", path: "/my-insurance-toolbox" },
-  { label: "Settings", path: "/my-insurance-toolbox/#/settings" },
+  {
+    icon: <SiConvertio />,
+    label: "Đọc số",
+    path: "/my-insurance-toolbox/#/number-to-text",
+  },
+  {
+    icon: <SiGitextensions />,
+    label: "Settings",
+    path: "/my-insurance-toolbox/#/settings",
+  },
 ];
 
 interface SidebarProps {
@@ -13,20 +30,32 @@ interface SidebarProps {
 
 function SidebarContent() {
   const location = useLocation();
+  const currentPath = location.hash?.replace(/^#/, "") || location.pathname;
+
   return (
     <VStack align="stretch" gap={1} p={4}>
-      {navItems.map((item) => (
-        <Link
-          href={item.path}
-          key={item.path}
-          p={2}
-          borderRadius="md"
-          bg={location.pathname === item.path ? "gray.200" : "transparent"}
-          _hover={{ bg: "gray.100" }}
-        >
-          <Text>{item.label}</Text>
-        </Link>
-      ))}
+      {navItems.map((item) => {
+        const itemHashPath = item.path.replace(/^.*#/, "");
+
+        const isActive = currentPath === itemHashPath;
+
+        return (
+          <Link
+            href={item.path}
+            key={item.path}
+            p={2}
+            borderRadius="md"
+            bg={isActive ? "primary.300" : "transparent"}
+            color={isActive ? "white" : "primary.500"}
+            _hover={{ bg: "primary.50", textDecoration: "none" }}
+          >
+            <Icon size="sm">{item.icon}</Icon>
+            <Text fontWeight={isActive ? "medium" : "normal"}>
+              {item.label}
+            </Text>
+          </Link>
+        );
+      })}
     </VStack>
   );
 }
