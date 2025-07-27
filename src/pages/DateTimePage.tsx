@@ -11,7 +11,7 @@ import {
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { GoNumber } from "react-icons/go";
-import { LuCalendarArrowDown } from "react-icons/lu";
+import { LuCalendarArrowDown, LuCalendarArrowUp } from "react-icons/lu";
 
 export default function DateTimePage() {
   const [firstStartDate, setFirstStartDate] = useState(dayjs());
@@ -115,7 +115,7 @@ export default function DateTimePage() {
             />
           </InputGroup>
 
-          <InputGroup startElement={<LuCalendarArrowDown />}>
+          <InputGroup startElement={<LuCalendarArrowUp />}>
             <Input
               type="date"
               placeholder="Ngày kết thúc"
