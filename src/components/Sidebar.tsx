@@ -7,8 +7,9 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
+import { FaCalendar } from "react-icons/fa";
 import { RxGithubLogo } from "react-icons/rx";
-import { SiConvertio, SiGitextensions } from "react-icons/si";
+import { SiConvertio } from "react-icons/si";
 import { useLocation } from "react-router-dom";
 
 const navItems = [
@@ -18,9 +19,9 @@ const navItems = [
     path: "/my-insurance-toolbox/#/number-to-text",
   },
   {
-    icon: <SiGitextensions />,
-    label: "Settings",
-    path: "/my-insurance-toolbox/#/settings",
+    icon: <FaCalendar />,
+    label: "Ngày tháng",
+    path: "/my-insurance-toolbox/#/date-time",
   },
 ];
 
@@ -55,7 +56,7 @@ function SidebarContent() {
             }}
           >
             <Icon size="sm">{item.icon}</Icon>
-            <Text fontWeight={isActive ? "medium" : "normal"}>
+            <Text fontWeight={isActive ? "medium" : "normal"} pl={2}>
               {item.label}
             </Text>
           </Link>

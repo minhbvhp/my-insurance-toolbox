@@ -1,6 +1,6 @@
 import MainLayout from "@/layouts/MainLayout";
 import NumberToTextPage from "@/pages/NumberToTextPage";
-import SettingsPage from "@/pages/SettingsPage";
+import DateTimePage from "@/pages/DateTimePage";
 import theme from "@/theme";
 import { ChakraProvider } from "@chakra-ui/react";
 import { Route, Routes } from "react-router-dom";
@@ -14,7 +14,7 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/number-to-text" element={<NumberToTextPage />} />
-          <Route path="/settings" element={<SettingsPage />} />
+          <Route path="/date-time" element={<DateTimePage />} />
         </Routes>
       </MainLayout>
     </ChakraProvider>

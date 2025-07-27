@@ -3,7 +3,14 @@ import { capitalizeFirstLetter } from "@/utils/helper";
 import { readEnglishNumber } from "@/utils/read-english-number";
 import { readUSDInEnglish } from "@/utils/read-usd-in-english";
 import { readVietnameseNumber } from "@/utils/read-vietnamese-number";
-import { Card, Grid, InputGroup, NumberInput } from "@chakra-ui/react";
+import {
+  Button,
+  Card,
+  Clipboard,
+  Grid,
+  InputGroup,
+  NumberInput,
+} from "@chakra-ui/react";
 import { useState } from "react";
 
 export default function NumberToTextPage() {
@@ -41,13 +48,25 @@ export default function NumberToTextPage() {
               endElement="VND"
               endElementProps={{ color: "gray.300" }}
             >
-              <NumberInput.Input />
+              <NumberInput.Input
+                placeholder="Nhập số tiền"
+                _placeholder={{ fontStyle: "italic", color: "gray.300" }}
+              />
             </InputGroup>
           </NumberInput.Root>
 
           {vndViInWords}
+
+          <Clipboard.Root value={vndViInWords} pt="2" alignSelf="end">
+            <Clipboard.Trigger asChild>
+              <Button variant="surface" size="xs">
+                <Clipboard.Indicator />
+              </Button>
+            </Clipboard.Trigger>
+          </Clipboard.Root>
         </Card.Body>
       </Card.Root>
+
       <Card.Root>
         <Card.Body gap="2">
           <Card.Title mt="2">Đọc tiền VND (Anh)</Card.Title>
@@ -68,13 +87,25 @@ export default function NumberToTextPage() {
               endElement="VND"
               endElementProps={{ color: "gray.300" }}
             >
-              <NumberInput.Input />
+              <NumberInput.Input
+                placeholder="Nhập số tiền"
+                _placeholder={{ fontStyle: "italic", color: "gray.300" }}
+              />
             </InputGroup>
           </NumberInput.Root>
 
           {vndEnInWords}
+
+          <Clipboard.Root value={vndEnInWords} pt="2" alignSelf="end">
+            <Clipboard.Trigger asChild>
+              <Button variant="surface" size="xs">
+                <Clipboard.Indicator />
+              </Button>
+            </Clipboard.Trigger>
+          </Clipboard.Root>
         </Card.Body>
       </Card.Root>
+
       <Card.Root>
         <Card.Body gap="2">
           <Card.Title mt="2">Đọc tiền USD (Việt)</Card.Title>
@@ -97,11 +128,22 @@ export default function NumberToTextPage() {
               endElement="USD"
               endElementProps={{ color: "gray.300" }}
             >
-              <NumberInput.Input />
+              <NumberInput.Input
+                placeholder="Nhập số tiền"
+                _placeholder={{ fontStyle: "italic", color: "gray.300" }}
+              />
             </InputGroup>
           </NumberInput.Root>
 
           {usdViInWords}
+
+          <Clipboard.Root value={usdViInWords} pt="2" alignSelf="end">
+            <Clipboard.Trigger asChild>
+              <Button variant="surface" size="xs">
+                <Clipboard.Indicator />
+              </Button>
+            </Clipboard.Trigger>
+          </Clipboard.Root>
         </Card.Body>
       </Card.Root>
 
@@ -127,11 +169,22 @@ export default function NumberToTextPage() {
               endElement="USD"
               endElementProps={{ color: "gray.300" }}
             >
-              <NumberInput.Input />
+              <NumberInput.Input
+                placeholder="Nhập số tiền"
+                _placeholder={{ fontStyle: "italic", color: "gray.300" }}
+              />
             </InputGroup>
           </NumberInput.Root>
 
           {usdEnInWords}
+
+          <Clipboard.Root value={usdEnInWords} pt="2" alignSelf="end">
+            <Clipboard.Trigger asChild>
+              <Button variant="surface" size="xs">
+                <Clipboard.Indicator />
+              </Button>
+            </Clipboard.Trigger>
+          </Clipboard.Root>
         </Card.Body>
       </Card.Root>
     </Grid>
