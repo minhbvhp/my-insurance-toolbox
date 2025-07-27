@@ -2,14 +2,13 @@ import {
   Box,
   Drawer,
   Icon,
+  Image,
   Link,
   Portal,
   Text,
   VStack,
-  Image,
 } from "@chakra-ui/react";
-import { desc } from "framer-motion/client";
-import { FaCalendar, FaHome } from "react-icons/fa";
+import { FaCalendar } from "react-icons/fa";
 import { RxGithubLogo } from "react-icons/rx";
 import { SiConvertio } from "react-icons/si";
 import { useLocation } from "react-router-dom";
