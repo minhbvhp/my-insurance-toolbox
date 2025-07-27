@@ -6,24 +6,44 @@ import {
   NumberInput,
   Clipboard,
   Button,
+  Text,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
+import { GoNumber } from "react-icons/go";
+import { LuCalendarArrowDown } from "react-icons/lu";
 
 export default function DateTimePage() {
-  const [startDate, setStartDate] = useState(dayjs());
-  const [addDays, setAddDays] = useState("");
-  const [endDate, setEndDate] = useState(dayjs());
+  const [firstStartDate, setFirstStartDate] = useState(dayjs());
+  const [firstAddDays, setFirstAddDays] = useState("");
+  const [firstEndDate, setFirstEndDate] = useState(dayjs());
+
+  const [secondStartDate, setSecondStartDate] = useState(dayjs());
+  const [secondEndDate, setSecondEndDate] = useState(dayjs());
+  const [secondDiffDays, setSecondDiffDays] = useState("");
 
   useEffect(() => {
     calculateEndDate();
-  }, [startDate, addDays]);
+  }, [firstStartDate, firstAddDays]);
+
+  useEffect(() => {
+    calculateDiffDays();
+  }, [secondStartDate, secondEndDate]);
 
   const calculateEndDate = () => {
-    if (startDate && addDays) {
-      const date = dayjs(startDate);
-      const _endDate = dayjs(date.add(+addDays, "day")).toDate();
-      setEndDate(dayjs(_endDate));
+    if (firstStartDate && firstAddDays) {
+      const date = dayjs(firstStartDate);
+      const _endDate = dayjs(date.add(+firstAddDays, "day")).toDate();
+      setFirstEndDate(dayjs(_endDate));
+    }
+  };
+
+  const calculateDiffDays = () => {
+    if (secondStartDate && secondEndDate) {
+      const _startDate = dayjs(secondStartDate);
+      const _endDate = dayjs(secondEndDate);
+      const diffDays = _endDate.diff(_startDate, "day") + 1;
+      setSecondDiffDays(diffDays.toString());
     }
   };
 
@@ -32,21 +52,25 @@ export default function DateTimePage() {
       <Card.Root>
         <Card.Body gap="2">
           <Card.Title mt="2">Ngày kết thúc</Card.Title>
-          <Input
-            type="date"
-            placeholder="Ngày bắt đầu"
-            value={startDate.format("YYYY-MM-DD")}
-            onChange={(e) => {
-              setStartDate(dayjs(e.target.value));
-            }}
-          />
+          <InputGroup startElement={<LuCalendarArrowDown />}>
+            <Input
+              type="date"
+              placeholder="Ngày bắt đầu"
+              value={firstStartDate.format("YYYY-MM-DD")}
+              onChange={(e) => {
+                setFirstStartDate(dayjs(e.target.value));
+              }}
+            />
+          </InputGroup>
+
           <NumberInput.Root
-            value={addDays}
+            value={firstAddDays}
             onValueChange={(e) => {
-              setAddDays(e.value);
+              setFirstAddDays(e.value);
             }}
           >
             <InputGroup
+              startElement={<GoNumber />}
               endElement="ngày"
               endElementProps={{ color: "gray.300" }}
             >
@@ -56,9 +80,15 @@ export default function DateTimePage() {
               />
             </InputGroup>
           </NumberInput.Root>
-          Ngày kết thúc: {endDate.format("DD/MM/YYYY")}
+          <Text>
+            Ngày kết thúc (gồm 2 ngày biên):{" "}
+            <span style={{ fontWeight: "bold" }}>
+              {firstEndDate.format("DD/MM/YYYY")}
+            </span>
+          </Text>
+
           <Clipboard.Root
-            value={endDate.format("DD/MM/YYYY")}
+            value={firstEndDate.format("DD/MM/YYYY")}
             pt="2"
             alignSelf="end"
           >
@@ -71,11 +101,45 @@ export default function DateTimePage() {
         </Card.Body>
       </Card.Root>
 
-      {/* <Card.Root>
+      <Card.Root>
         <Card.Body gap="2">
-          <Card.Title mt="2">Số ngày chênh lệch</Card.Title>
+          <Card.Title mt="2">Ngày chênh lệch</Card.Title>
+          <InputGroup startElement={<LuCalendarArrowDown />}>
+            <Input
+              type="date"
+              placeholder="Ngày bắt đầu"
+              value={secondStartDate.format("YYYY-MM-DD")}
+              onChange={(e) => {
+                setSecondStartDate(dayjs(e.target.value));
+              }}
+            />
+          </InputGroup>
+
+          <InputGroup startElement={<LuCalendarArrowDown />}>
+            <Input
+              type="date"
+              placeholder="Ngày kết thúc"
+              value={secondEndDate.format("YYYY-MM-DD")}
+              onChange={(e) => {
+                setSecondEndDate(dayjs(e.target.value));
+              }}
+            />
+          </InputGroup>
+
+          <Text>
+            Số ngày chênh lệch (gồm 2 ngày biên):{" "}
+            <span style={{ fontWeight: "bold" }}>{secondDiffDays}</span>
+          </Text>
+
+          <Clipboard.Root value={secondDiffDays} pt="2" alignSelf="end">
+            <Clipboard.Trigger asChild>
+              <Button variant="surface" size="xs">
+                <Clipboard.Indicator />
+              </Button>
+            </Clipboard.Trigger>
+          </Clipboard.Root>
         </Card.Body>
-      </Card.Root> */}
+      </Card.Root>
     </Grid>
   );
 }

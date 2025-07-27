@@ -10,8 +10,10 @@ import {
   Grid,
   InputGroup,
   NumberInput,
+  Text,
 } from "@chakra-ui/react";
 import { useState } from "react";
+import { GoNumber } from "react-icons/go";
 
 export default function NumberToTextPage() {
   const [vndViValue, setVndViValue] = useState("");
@@ -45,6 +47,7 @@ export default function NumberToTextPage() {
             }}
           >
             <InputGroup
+              startElement={<GoNumber />}
               endElement="VND"
               endElementProps={{ color: "gray.300" }}
             >
@@ -55,7 +58,7 @@ export default function NumberToTextPage() {
             </InputGroup>
           </NumberInput.Root>
 
-          {vndViInWords}
+          <Text fontStyle="italic">{vndViInWords}</Text>
 
           <Clipboard.Root value={vndViInWords} pt="2" alignSelf="end">
             <Clipboard.Trigger asChild>
@@ -84,6 +87,7 @@ export default function NumberToTextPage() {
             }}
           >
             <InputGroup
+              startElement={<GoNumber />}
               endElement="VND"
               endElementProps={{ color: "gray.300" }}
             >
@@ -94,7 +98,7 @@ export default function NumberToTextPage() {
             </InputGroup>
           </NumberInput.Root>
 
-          {vndEnInWords}
+          <Text fontStyle="italic">{vndEnInWords}</Text>
 
           <Clipboard.Root value={vndEnInWords} pt="2" alignSelf="end">
             <Clipboard.Trigger asChild>
@@ -125,6 +129,7 @@ export default function NumberToTextPage() {
             }}
           >
             <InputGroup
+              startElement={<GoNumber />}
               endElement="USD"
               endElementProps={{ color: "gray.300" }}
             >
@@ -135,7 +140,7 @@ export default function NumberToTextPage() {
             </InputGroup>
           </NumberInput.Root>
 
-          {usdViInWords}
+          <Text fontStyle="italic">{usdViInWords}</Text>
 
           <Clipboard.Root value={usdViInWords} pt="2" alignSelf="end">
             <Clipboard.Trigger asChild>
@@ -166,6 +171,7 @@ export default function NumberToTextPage() {
             }}
           >
             <InputGroup
+              startElement={<GoNumber />}
               endElement="USD"
               endElementProps={{ color: "gray.300" }}
             >
@@ -176,7 +182,7 @@ export default function NumberToTextPage() {
             </InputGroup>
           </NumberInput.Root>
 
-          {usdEnInWords}
+          <Text fontStyle="italic">{usdEnInWords}</Text>
 
           <Clipboard.Root value={usdEnInWords} pt="2" alignSelf="end">
             <Clipboard.Trigger asChild>
