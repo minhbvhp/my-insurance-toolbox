@@ -8,10 +8,15 @@ export default function HomePage() {
         My Insurance Toolbox
       </Text>
 
-      <Grid templateColumns="repeat(4, 1fr)" gap="6" pt={16}>
+      <Grid
+        templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(4, 1fr)" }}
+        gap="6"
+        pt={16}
+      >
         <For each={navItems}>
           {(item) => (
             <Card.Root
+              key={item.label}
               _hover={{ borderColor: "primary.300" }}
               transition="border-color 0.4s ease-in-out"
             >

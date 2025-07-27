@@ -29,7 +29,10 @@ export default function NumberToTextPage() {
   const [usdEnInWords, setUsdEnInWords] = useState("");
 
   return (
-    <Grid templateColumns="repeat(2, 1fr)" gap="6">
+    <Grid
+      templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(2, 1fr)" }}
+      gap="6"
+    >
       <Card.Root>
         <Card.Body gap="2">
           <Card.Title mt="2">Đọc tiền VND (Việt)</Card.Title>
