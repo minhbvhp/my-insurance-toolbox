@@ -101,7 +101,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
         display={{ base: "none", md: "block" }}
         pt={8}
       >
-        <a href="/">
+        <a href="/my-insurance-toolbox">
           <Image
             src="/my-insurance-toolbox/logo.png"
             alt="My Insurance Toolbox"
