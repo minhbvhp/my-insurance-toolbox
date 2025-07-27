@@ -6,22 +6,27 @@ import {
   Portal,
   Text,
   VStack,
+  Image,
 } from "@chakra-ui/react";
-import { FaCalendar } from "react-icons/fa";
+import { desc } from "framer-motion/client";
+import { FaCalendar, FaHome } from "react-icons/fa";
 import { RxGithubLogo } from "react-icons/rx";
 import { SiConvertio } from "react-icons/si";
 import { useLocation } from "react-router-dom";
 
-const navItems = [
+export const navItems = [
   {
     icon: <SiConvertio />,
     label: "Đọc số",
     path: "/my-insurance-toolbox/#/number-to-text",
+    description: "Đọc số tiền (VND, USD) sang chữ bằng ngôn ngữ Anh và Việt...",
   },
   {
     icon: <FaCalendar />,
     label: "Ngày tháng",
     path: "/my-insurance-toolbox/#/date-time",
+    description:
+      "Tính toán ngày kết thúc khi nhập ngày bắt đầu và một số ngày nhất định, chênh lệch ngày giữa hai thời điểm...",
   },
 ];
 
@@ -97,17 +102,34 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
         display={{ base: "none", md: "block" }}
         pt={8}
       >
+        <a href="/">
+          <Image
+            src="/my-insurance-toolbox/logo.png"
+            alt="My Insurance Toolbox"
+            boxSize={12}
+            mx="auto"
+            mb={4}
+          />
+        </a>
+
+        <SidebarContent />
+
         <a
           href="https://github.com/minhbvhp"
           target="_blank"
           rel="noopener noreferrer"
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            position: "absolute",
+            bottom: 4,
+            width: "100%",
+          }}
         >
-          <Icon size={"lg"} color={"primary.500"} mb={4} animation={"bounce"}>
+          <Icon size={"2xl"} mb={12}>
             <RxGithubLogo />
           </Icon>
         </a>
-
-        <SidebarContent />
       </Box>
     </>
   );
