@@ -87,7 +87,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
       {/* Desktop Sidebar */}
 
       <Box
-        w="80"
+        w={48}
         bg="gray.100"
         borderRight="1px solid"
         borderColor="blackAlpha.100"

@@ -13,11 +13,9 @@ export default function MainLayout({ children }: MainLayoutProps) {
   return (
     <Box height="100vh" w={"full"}>
       <Sidebar isOpen={open} onClose={onClose} />
-      <Box pl={{ base: 0, md: 60 }}>
+      <Box pl={{ base: 0, md: 48 }}>
         <Header onOpen={onOpen} />
-        <Box p={{ base: 10, md: 24 }} pl={{ md: 60 }}>
-          {children}
-        </Box>
+        <Box p={{ base: 10, md: 12 }}>{children}</Box>
       </Box>
     </Box>
   );
