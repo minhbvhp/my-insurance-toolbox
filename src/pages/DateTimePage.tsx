@@ -33,15 +33,19 @@ export default function DateTimePage() {
   const calculateEndDate = () => {
     if (firstStartDate && firstAddDays) {
       const date = dayjs(firstStartDate);
-      const _endDate = dayjs(date.add(+firstAddDays, "day")).toDate();
+      const _endDate = dayjs(date.add(+firstAddDays - 1, "day"))
+        .hour(23)
+        .minute(59)
+        .second(0)
+        .toDate();
       setFirstEndDate(dayjs(_endDate));
     }
   };
 
   const calculateDiffDays = () => {
     if (secondStartDate && secondEndDate) {
-      const _startDate = dayjs(secondStartDate);
-      const _endDate = dayjs(secondEndDate);
+      const _startDate = dayjs(secondStartDate).hour(0).minute(0).second(0);
+      const _endDate = dayjs(secondEndDate).hour(23).minute(59).second(0);
       const diffDays = _endDate.diff(_startDate, "day") + 1;
       setSecondDiffDays(diffDays.toString());
     }
