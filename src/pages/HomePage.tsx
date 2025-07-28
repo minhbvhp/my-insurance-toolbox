@@ -5,7 +5,7 @@ export default function HomePage() {
   return (
     <>
       <Text fontSize="2xl" fontWeight="bold" mb={4} color={"primary.500"}>
-        My Insurance Toolbox
+        My Insurance Mini Tools
       </Text>
 
       <Grid

@@ -104,7 +104,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
         <a href="/my-insurance-toolbox">
           <Image
             src="/my-insurance-toolbox/logo.png"
-            alt="My Insurance Toolbox"
+            alt="My Insurance Mini Tools"
             boxSize={12}
             mx="auto"
             mb={4}
