@@ -6,6 +6,7 @@ import { ChakraProvider } from "@chakra-ui/react";
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import HomePage from "./pages/HomePage";
+import PremiumPage from "@/pages/PremiumPage";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/number-to-text" element={<NumberToTextPage />} />
           <Route path="/date-time" element={<DateTimePage />} />
+          <Route path="/premium" element={<PremiumPage />} />
         </Routes>
       </MainLayout>
     </ChakraProvider>

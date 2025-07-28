@@ -9,6 +9,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { FaCalendar } from "react-icons/fa";
+import { MdPaid } from "react-icons/md";
 import { RxGithubLogo } from "react-icons/rx";
 import { SiConvertio } from "react-icons/si";
 import { useLocation } from "react-router-dom";
@@ -26,6 +27,13 @@ export const navItems = [
     path: "/my-insurance-toolbox/#/date-time",
     description:
       "Tính toán ngày kết thúc khi nhập ngày bắt đầu và một số ngày nhất định, chênh lệch ngày giữa hai thời điểm...",
+  },
+  {
+    icon: <MdPaid />,
+    label: "Tính phí",
+    path: "/my-insurance-toolbox/#/premium",
+    description:
+      "Tính toán phí bảo hiểm năm theo số tiền bảo hiểm và tỉ lệ phí bảo hiểm...",
   },
 ];
 
