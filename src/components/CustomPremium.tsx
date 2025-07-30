@@ -16,6 +16,7 @@ import { Controller, useFieldArray, useForm, useWatch } from "react-hook-form";
 import { FaCircleMinus, FaCirclePlus } from "react-icons/fa6";
 import { GoNumber } from "react-icons/go";
 import { LuCheck, LuPencilLine, LuX } from "react-icons/lu";
+import { TbSum } from "react-icons/tb";
 
 type Item = {
   name: string;
@@ -28,7 +29,7 @@ type FormValues = {
 };
 
 export default function CustomPremiumForm() {
-  const { register, control, handleSubmit } = useForm<FormValues>({
+  const { control, handleSubmit } = useForm<FormValues>({
     defaultValues: {
       items: [{ name: "", amount: "", rate: "" }],
     },
@@ -51,6 +52,10 @@ export default function CustomPremiumForm() {
       sum + calculateFee(Number(item.amount || 0), Number(item.rate || 0)),
     0
   );
+
+  const totalVat = Math.round(totalFee * 0.1);
+
+  const totalDue = totalFee + totalVat;
 
   const onSubmit = (data: FormValues) => {
     console.log(data);
@@ -161,8 +166,8 @@ export default function CustomPremiumForm() {
                   </Box>
 
                   {/* Phí bảo hiểm */}
-                  <Stat.Root flex="1" minW="150px">
-                    <Stat.Label>Phí bảo hiểm</Stat.Label>
+                  <Stat.Root flex="1" minW="150px" size="sm">
+                    <Stat.Label>Phí thuần</Stat.Label>
                     <Stat.ValueText color="teal.500">
                       {fee.toLocaleString("vi-VN", {
                         style: "currency",
@@ -172,33 +177,43 @@ export default function CustomPremiumForm() {
                     </Stat.ValueText>
                   </Stat.Root>
 
-                  <Button
-                    variant="solid"
+                  <IconButton
+                    size="sm"
+                    variant="ghost"
+                    rounded="full"
                     onClick={() => remove(index)}
                     alignSelf="flex-end"
-                    colorScheme="red"
                     disabled={fields.length === 1}
+                    _hover={{
+                      bg: "none",
+                    }}
                   >
                     <FaCircleMinus />
-                  </Button>
+                  </IconButton>
+
+                  <IconButton
+                    size="sm"
+                    variant="ghost"
+                    rounded="full"
+                    onClick={() => append({ name: "", amount: "", rate: "" })}
+                    alignSelf="flex-end"
+                    _hover={{
+                      bg: "none",
+                    }}
+                  >
+                    <FaCirclePlus />
+                  </IconButton>
                 </Flex>
               </Fieldset.Content>
-
-              <Button
-                variant="solid"
-                onClick={() => append({ name: "", amount: "", rate: "" })}
-                alignSelf="flex-end"
-                colorScheme="blue"
-              >
-                <FaCirclePlus />
-              </Button>
 
               <Separator />
 
               {/* Tổng cộng */}
               <Flex justify="space-between" mt={4} gap={4} flexWrap="wrap">
-                <Stat.Root minW="200px">
-                  <Stat.Label>Tổng số tiền / Mức trách nhiệm</Stat.Label>
+                <Stat.Root minW="200px" size="sm">
+                  <Stat.Label>
+                    <TbSum /> Số tiền / Mức trách nhiệm
+                  </Stat.Label>
                   <Stat.ValueText>
                     {totalAmount.toLocaleString("vi-VN", {
                       style: "currency",
@@ -207,11 +222,44 @@ export default function CustomPremiumForm() {
                     })}
                   </Stat.ValueText>
                 </Stat.Root>
+              </Flex>
 
-                <Stat.Root minW="200px">
-                  <Stat.Label>Tổng phí bảo hiểm</Stat.Label>
+              <Flex justify="space-between" mt={4} gap={4} flexWrap="wrap">
+                <Stat.Root minW="200px" size="sm">
+                  <Stat.Label>
+                    <TbSum />
+                    Phí thuần
+                  </Stat.Label>
                   <Stat.ValueText color="green.500">
                     {totalFee.toLocaleString("vi-VN", {
+                      style: "currency",
+                      currency: "VND",
+                      minimumFractionDigits: 0,
+                    })}
+                  </Stat.ValueText>
+                </Stat.Root>
+
+                <Stat.Root minW="200px" size="sm">
+                  <Stat.Label>
+                    <TbSum />
+                    VAT
+                  </Stat.Label>
+                  <Stat.ValueText color="orange.500">
+                    {totalVat.toLocaleString("vi-VN", {
+                      style: "currency",
+                      currency: "VND",
+                      minimumFractionDigits: 0,
+                    })}
+                  </Stat.ValueText>
+                </Stat.Root>
+
+                <Stat.Root minW="200px" size="sm">
+                  <Stat.Label>
+                    <TbSum />
+                    Phí
+                  </Stat.Label>
+                  <Stat.ValueText color="blue.500">
+                    {totalDue.toLocaleString("vi-VN", {
                       style: "currency",
                       currency: "VND",
                       minimumFractionDigits: 0,
