@@ -1,10 +1,13 @@
 import {
   Box,
   Button,
+  Editable,
   Field,
   Fieldset,
   Flex,
+  IconButton,
   Input,
+  InputGroup,
   NumberInput,
   Separator,
   Stat,
@@ -12,11 +15,13 @@ import {
 } from "@chakra-ui/react";
 import { Controller, useFieldArray, useForm, useWatch } from "react-hook-form";
 import { FaCircleMinus, FaCirclePlus } from "react-icons/fa6";
+import { GoNumber } from "react-icons/go";
+import { LuCheck, LuPencilLine, LuX } from "react-icons/lu";
 
 type Item = {
   name: string;
-  amount: number;
-  rate: number;
+  amount: string;
+  rate: string;
 };
 
 type FormValues = {
@@ -26,7 +31,7 @@ type FormValues = {
 export default function CustomPremiumForm() {
   const { register, control, handleSubmit } = useForm<FormValues>({
     defaultValues: {
-      items: [{ name: "", amount: 0, rate: 0 }],
+      items: [{ name: "", amount: "", rate: "" }],
     },
   });
 
@@ -41,6 +46,7 @@ export default function CustomPremiumForm() {
 
   const totalAmount =
     values?.reduce((sum, item) => sum + Number(item.amount || 0), 0) ?? 0;
+
   const totalFee = values?.reduce(
     (sum, item) =>
       sum + calculateFee(Number(item.amount || 0), Number(item.rate || 0)),
@@ -67,22 +73,31 @@ export default function CustomPremiumForm() {
               borderRadius="md"
             >
               <Fieldset.Legend as="legend">
-                Hạng mục #{index + 1}
+                <Editable.Root defaultValue="Hạng mục">
+                  <Editable.Preview />
+                  <Editable.Input />
+                  <Editable.Control>
+                    <Editable.EditTrigger asChild>
+                      <IconButton variant="ghost" size="xs">
+                        <LuPencilLine />
+                      </IconButton>
+                    </Editable.EditTrigger>
+                    <Editable.CancelTrigger asChild>
+                      <IconButton variant="outline" size="xs">
+                        <LuX />
+                      </IconButton>
+                    </Editable.CancelTrigger>
+                    <Editable.SubmitTrigger asChild>
+                      <IconButton variant="outline" size="xs">
+                        <LuCheck />
+                      </IconButton>
+                    </Editable.SubmitTrigger>
+                  </Editable.Control>
+                </Editable.Root>
               </Fieldset.Legend>
 
               <Fieldset.Content>
                 <Flex gap={4} mt={2} flexWrap="wrap">
-                  {/* Hạng mục */}
-                  <Box flex="2" minW="200px">
-                    <Field.Root>
-                      <Field.Label fontSize="sm">Tên hạng mục</Field.Label>
-                    </Field.Root>
-                    <Input
-                      {...register(`items.${index}.name`)}
-                      placeholder="Nhập tên"
-                    />
-                  </Box>
-
                   {/* Số tiền / Mức trách nhiệm */}
                   <Box flex="2" minW="200px">
                     <Field.Root>
@@ -96,14 +111,39 @@ export default function CustomPremiumForm() {
                       render={({ field }) => (
                         <NumberInput.Root
                           name={field.name}
-                          value={field.value.toString()}
-                          onValueChange={({ value }) => {
-                            field.onChange(value);
+                          formatOptions={{
+                            useGrouping: true,
+                          }}
+                          locale="vi-VN"
+                          value={field.value}
+                          onValueChange={({ valueAsNumber }) => {
+                            field.onChange(valueAsNumber);
                           }}
                         >
-                          <NumberInput.Control />
-                          <NumberInput.Input onBlur={field.onBlur} />
+                          <InputGroup
+                            startElement={<GoNumber />}
+                            endElement="VND"
+                            endElementProps={{ color: "gray.300" }}
+                          >
+                            <NumberInput.Input
+                              placeholder="Nhập số tiền"
+                              _placeholder={{
+                                fontStyle: "italic",
+                                color: "gray.300",
+                              }}
+                            />
+                          </InputGroup>
                         </NumberInput.Root>
+                        // <NumberInput.Root
+                        //   name={field.name}
+                        //   value={field.value.toString()}
+                        //   onValueChange={({ value }) => {
+                        //     field.onChange(value);
+                        //   }}
+                        // >
+                        //   <NumberInput.Control />
+                        //   <NumberInput.Input onBlur={field.onBlur} />
+                        // </NumberInput.Root>
                       )}
                     />
                   </Box>
@@ -159,7 +199,7 @@ export default function CustomPremiumForm() {
 
               <Button
                 variant="solid"
-                onClick={() => append({ name: "", amount: 0, rate: 0 })}
+                onClick={() => append({ name: "", amount: "", rate: "" })}
                 alignSelf="flex-end"
                 colorScheme="blue"
               >

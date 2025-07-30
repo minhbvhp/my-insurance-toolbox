@@ -17,7 +17,7 @@ export default function PremiumPage() {
 
       <Card.Root>
         <Card.Body gap="2">
-          <Card.Title mt="2">Ngày chênh lệch</Card.Title>
+          <Card.Title mt="2">Đơn tài sản</Card.Title>
         </Card.Body>
       </Card.Root>
     </Grid>
