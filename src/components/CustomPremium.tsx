@@ -6,7 +6,6 @@ import {
   Fieldset,
   Flex,
   IconButton,
-  Input,
   InputGroup,
   NumberInput,
   Separator,
@@ -105,20 +104,17 @@ export default function CustomPremiumForm() {
                         Số tiền / Mức trách nhiệm
                       </Field.Label>
                     </Field.Root>
+
                     <Controller
                       control={control}
                       name={`items.${index}.amount`}
                       render={({ field }) => (
                         <NumberInput.Root
-                          name={field.name}
                           formatOptions={{
                             useGrouping: true,
                           }}
                           locale="vi-VN"
-                          value={field.value}
-                          onValueChange={({ valueAsNumber }) => {
-                            field.onChange(valueAsNumber);
-                          }}
+                          onValueChange={(e) => field.onChange(e.valueAsNumber)}
                         >
                           <InputGroup
                             startElement={<GoNumber />}
@@ -134,16 +130,6 @@ export default function CustomPremiumForm() {
                             />
                           </InputGroup>
                         </NumberInput.Root>
-                        // <NumberInput.Root
-                        //   name={field.name}
-                        //   value={field.value.toString()}
-                        //   onValueChange={({ value }) => {
-                        //     field.onChange(value);
-                        //   }}
-                        // >
-                        //   <NumberInput.Control />
-                        //   <NumberInput.Input onBlur={field.onBlur} />
-                        // </NumberInput.Root>
                       )}
                     />
                   </Box>
@@ -160,6 +146,7 @@ export default function CustomPremiumForm() {
                         <NumberInput.Root
                           min={0}
                           max={100}
+                          step={0.01}
                           name={field.name}
                           value={field.value.toString()}
                           onValueChange={({ value }) => {
