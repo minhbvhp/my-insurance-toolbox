@@ -1,4 +1,5 @@
 import CustomPremiumForm from "@/components/CustomPremium";
+import PropertyPremiumForm from "@/components/PropertyPremium";
 import { Card, Grid } from "@chakra-ui/react";
 
 export default function PremiumPage() {
@@ -9,7 +10,9 @@ export default function PremiumPage() {
     >
       <Card.Root>
         <Card.Body gap="2">
-          <Card.Title mt="2">Theo hạng mục</Card.Title>
+          <Card.Title mt="2" color={"primary.600"}>
+            Theo hạng mục
+          </Card.Title>
 
           <CustomPremiumForm />
         </Card.Body>
@@ -17,7 +20,10 @@ export default function PremiumPage() {
 
       <Card.Root>
         <Card.Body gap="2">
-          <Card.Title mt="2">Đơn tài sản</Card.Title>
+          <Card.Title mt="2" color={"primary.600"}>
+            Đơn tài sản
+          </Card.Title>
+          <PropertyPremiumForm />
         </Card.Body>
       </Card.Root>
     </Grid>
