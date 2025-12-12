@@ -10,6 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { FaCalendar } from "react-icons/fa";
 import { MdPaid } from "react-icons/md";
+import { RiFileExcel2Fill } from "react-icons/ri";
 import { RxGithubLogo } from "react-icons/rx";
 import { SiConvertio } from "react-icons/si";
 import { useLocation } from "react-router-dom";
@@ -34,6 +35,12 @@ export const navItems = [
     path: "/my-insurance-toolbox/#/premium",
     description:
       "Tính toán phí bảo hiểm năm theo số tiền bảo hiểm và tỉ lệ phí bảo hiểm...",
+  },
+  {
+    icon: <RiFileExcel2Fill />,
+    label: "Thêm CCCD",
+    path: "/my-insurance-toolbox/#/add-citizen-id",
+    description: "Thêm thông tin CCCD vào file Excel...",
   },
 ];
 

@@ -7,6 +7,7 @@ import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import HomePage from "./pages/HomePage";
 import PremiumPage from "@/pages/PremiumPage";
+import AddCitizenIdPage from "@/pages/AddCitizenIdPage";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="/number-to-text" element={<NumberToTextPage />} />
           <Route path="/date-time" element={<DateTimePage />} />
           <Route path="/premium" element={<PremiumPage />} />
+          <Route path="/add-citizen-id" element={<AddCitizenIdPage />} />
         </Routes>
       </MainLayout>
     </ChakraProvider>
