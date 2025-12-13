@@ -9,15 +9,28 @@ export function formatNumberWithCommas(num: number): string {
   return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
+function normalizeText(value: string) {
+  return value
+    .trim()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+}
+
 export function findColumnIndex(sheet: XLSX.Sheet, headerName: string) {
   const range = XLSX.utils.decode_range(sheet["!ref"]!);
+  const target = normalizeText(headerName);
 
   for (let R = range.s.r; R <= range.e.r; R++) {
     for (let C = range.s.c; C <= range.e.c; C++) {
       const cellAddress = XLSX.utils.encode_cell({ r: R, c: C });
       const cell = sheet[cellAddress];
 
-      if (cell && String(cell.v).trim() === headerName) {
+      if (!cell || cell.v == null) continue;
+
+      const cellValue = normalizeText(String(cell.v));
+
+      if (cellValue === target) {
         return { col: C, row: R };
       }
     }
@@ -53,7 +66,6 @@ export function extractAccountAndCitizen(sheet: XLSX.Sheet) {
   const colCCCD = findColumnIndex(sheet, "SỐ CCCD");
 
   if (!colTaiKhoan || !colCCCD) {
-    console.error("Không tìm thấy header!");
     return [];
   }
 
