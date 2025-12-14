@@ -1,6 +1,11 @@
 import { toaster } from "@/components/ui/toaster";
 import { Tooltip } from "@/components/ui/tooltip";
-import { extractAccountAndCitizen } from "@/utils/helper";
+import {
+  buildAccountMap,
+  extractAccountAndCitizen,
+  fillCitizenIdToSheet,
+  type AccountAndCitizen,
+} from "@/utils/helper";
 import {
   Box,
   ButtonGroup,
@@ -16,11 +21,6 @@ import { useEffect, useRef, useState } from "react";
 import { FaAngleLeft, FaAngleRight, FaFileExcel } from "react-icons/fa";
 import { LuHardDriveUpload } from "react-icons/lu";
 import * as XLSX from "xlsx";
-
-type AccountAndCitizen = {
-  so_tai_khoan: string;
-  so_cccd: string;
-};
 
 export default function AddCitizenIdPage() {
   const [summaryData, setSummaryData] = useState<AccountAndCitizen[]>([]);
@@ -67,30 +67,66 @@ export default function AddCitizenIdPage() {
     const file = files?.[0];
     if (!file) return;
 
+    if (summaryData.length === 0) {
+      toaster.create({
+        title: "Lỗi",
+        type: "error",
+        description: "Chưa có dữ liệu từ file tổng hợp",
+      });
+      return;
+    }
+
     const data = await file.arrayBuffer();
     const workbook = XLSX.read(data);
-    const sheet = workbook.Sheets[workbook.SheetNames[0]];
-    const json = XLSX.utils.sheet_to_json(sheet);
+    const sheetName = workbook.SheetNames[0];
+    const sheet = workbook.Sheets[sheetName];
 
-    console.log(json);
+    const accountMap = buildAccountMap(summaryData);
+
+    fillCitizenIdToSheet(sheet, accountMap);
+
+    const outBuffer = XLSX.write(workbook, {
+      bookType: "xlsx",
+      type: "array",
+    });
+
+    return new File([outBuffer], `file-da-dien-cccd.xlsx`, {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    });
   };
 
-  // const exportExcel = () => {
-  //   const data = [
-  //     { name: "Alice", age: 24 },
-  //     { name: "Bob", age: 30 },
-  //   ];
+  const downloadExcelFile = (file: File, filename?: string) => {
+    const url = URL.createObjectURL(file);
 
-  //   // Convert JSON → worksheet
-  //   const worksheet = XLSX.utils.json_to_sheet(data);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename || file.name;
+    a.click();
 
-  //   // Tạo workbook mới
-  //   const workbook = XLSX.utils.book_new();
-  //   XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+    URL.revokeObjectURL(url);
+  };
 
-  //   // Xuất file
-  //   XLSX.writeFile(workbook, "example.xlsx");
-  // };
+  const handleStep2 = async (files: File[]) => {
+    try {
+      const outputFile = await readNeedModifyFile(files);
+
+      if (!outputFile) return;
+
+      downloadExcelFile(outputFile);
+
+      toaster.create({
+        title: "Thành công",
+        type: "success",
+        description: "Đã tạo file Excel đã điền CCCD",
+      });
+    } catch (err) {
+      toaster.create({
+        title: "Lỗi",
+        type: "error",
+        description: (err as Error).message,
+      });
+    }
+  };
 
   useEffect(() => {
     const file = summaryFile.acceptedFiles[0];
@@ -202,7 +238,12 @@ export default function AddCitizenIdPage() {
         </Steps.Content>
 
         <Steps.CompletedContent marginY="6">
-          Đã sẵn sàng tải về
+          <IconButton
+            variant="outline"
+            onClick={() => handleStep2(needModifyFile.acceptedFiles)}
+          >
+            <FaFileExcel />
+          </IconButton>
         </Steps.CompletedContent>
 
         <Stack alignItems="center">
