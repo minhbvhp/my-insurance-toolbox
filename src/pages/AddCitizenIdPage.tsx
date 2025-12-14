@@ -1,4 +1,5 @@
 import { toaster } from "@/components/ui/toaster";
+import { Tooltip } from "@/components/ui/tooltip";
 import { extractAccountAndCitizen } from "@/utils/helper";
 import {
   Box,
@@ -8,6 +9,8 @@ import {
   Stack,
   Steps,
   useFileUpload,
+  Text,
+  Flex,
 } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import { FaAngleLeft, FaAngleRight, FaFileExcel } from "react-icons/fa";
@@ -113,12 +116,16 @@ export default function AddCitizenIdPage() {
 
   return (
     <Stack
-      marginX={{ base: "20px", md: "40px", lg: "180px" }}
+      marginX={{ base: "20px", lg: "180px" }}
       marginY={{ base: "20px", md: "40px" }}
     >
-      <Steps.Root width="800px" defaultStep={0} count={2}>
+      <Steps.Root
+        width={{ base: "full", md: "680px" }}
+        defaultStep={0}
+        count={2}
+      >
         <Steps.List>
-          <Steps.Item key={0} index={0} title="File tổng hợp">
+          <Steps.Item key={0} index={0}>
             <Steps.Indicator />
             <Box>
               <Steps.Title>File tổng hợp</Steps.Title>
@@ -129,13 +136,21 @@ export default function AddCitizenIdPage() {
                       summaryData && summaryData.length > 0 ? "green" : "gray"
                     }
                   />
+
+                  <Flex maxWidth={{ base: "20px", md: "120px" }}>
+                    <Tooltip content={summaryFile.acceptedFiles?.[0]?.name}>
+                      <Text truncate>
+                        {summaryFile.acceptedFiles?.[0]?.name}
+                      </Text>
+                    </Tooltip>
+                  </Flex>
                 </Stack>
               </Steps.Description>
             </Box>
             <Steps.Separator />
           </Steps.Item>
 
-          <Steps.Item key={1} index={1} title="File cần thêm CCCD">
+          <Steps.Item key={1} index={1}>
             <Steps.Indicator />
             <Box>
               <Steps.Title>File cần thêm CCCD</Steps.Title>
@@ -149,6 +164,14 @@ export default function AddCitizenIdPage() {
                         : "gray"
                     }
                   />
+
+                  <Flex maxWidth={{ base: "20px", md: "120px" }}>
+                    <Tooltip content={needModifyFile.acceptedFiles?.[0]?.name}>
+                      <Text truncate>
+                        {needModifyFile.acceptedFiles?.[0]?.name}
+                      </Text>
+                    </Tooltip>
+                  </Flex>
                 </Stack>
               </Steps.Description>
             </Box>
