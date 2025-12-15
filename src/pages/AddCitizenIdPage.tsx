@@ -8,19 +8,21 @@ import {
 } from "@/utils/helper";
 import {
   Box,
+  Button,
   ButtonGroup,
   FileUpload,
+  Flex,
+  FormatByte,
   IconButton,
   Stack,
   Steps,
-  useFileUpload,
   Text,
-  Flex,
+  useFileUpload,
 } from "@chakra-ui/react";
+import { Workbook } from "exceljs";
 import { useEffect, useRef, useState } from "react";
 import { FaAngleLeft, FaAngleRight, FaFileExcel } from "react-icons/fa";
-import { LuHardDriveUpload } from "react-icons/lu";
-import * as XLSX from "xlsx";
+import { LuDownload, LuHardDriveUpload } from "react-icons/lu";
 
 export default function AddCitizenIdPage() {
   const [summaryData, setSummaryData] = useState<AccountAndCitizen[]>([]);
@@ -41,11 +43,13 @@ export default function AddCitizenIdPage() {
     const file = files?.[0];
     if (!file) return;
 
-    const data = await file.arrayBuffer();
-    const workbook = XLSX.read(data);
-    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+    const buffer = await file.arrayBuffer();
+    const workbook = new Workbook();
+    await workbook.xlsx.load(buffer);
 
-    const extracted = extractAccountAndCitizen(sheet);
+    const worksheet = workbook.worksheets[0];
+
+    const extracted = extractAccountAndCitizen(worksheet);
 
     if (extracted.length === 0) {
       toaster.create({
@@ -56,7 +60,6 @@ export default function AddCitizenIdPage() {
       });
 
       setSummaryData([]);
-
       return;
     }
 
@@ -76,21 +79,19 @@ export default function AddCitizenIdPage() {
       return;
     }
 
-    const data = await file.arrayBuffer();
-    const workbook = XLSX.read(data);
-    const sheetName = workbook.SheetNames[0];
-    const sheet = workbook.Sheets[sheetName];
+    const buffer = await file.arrayBuffer();
+    const workbook = new Workbook();
+    await workbook.xlsx.load(buffer);
 
     const accountMap = buildAccountMap(summaryData);
 
-    fillCitizenIdToSheet(sheet, accountMap);
-
-    const outBuffer = XLSX.write(workbook, {
-      bookType: "xlsx",
-      type: "array",
+    workbook.worksheets.forEach((worksheet) => {
+      fillCitizenIdToSheet(worksheet, accountMap);
     });
 
-    return new File([outBuffer], `file-da-dien-cccd.xlsx`, {
+    const outBuffer = await workbook.xlsx.writeBuffer();
+
+    return new File([outBuffer], "File da them CCCD.xlsx", {
       type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     });
   };
@@ -106,7 +107,7 @@ export default function AddCitizenIdPage() {
     URL.revokeObjectURL(url);
   };
 
-  const handleStep2 = async (files: File[]) => {
+  const getFileAfterModify = async (files: File[]) => {
     try {
       const outputFile = await readNeedModifyFile(files);
 
@@ -138,17 +139,6 @@ export default function AddCitizenIdPage() {
 
     readSummaryFile([file]);
   }, [summaryFile.acceptedFiles]);
-
-  useEffect(() => {
-    const file = needModifyFile.acceptedFiles[0];
-    if (!file) return;
-
-    // chặn xử lý lại cùng 1 file
-    if (lastProcessedFile.current === file.name) return;
-    lastProcessedFile.current = file.name;
-
-    readNeedModifyFile([file]);
-  }, [needModifyFile.acceptedFiles]);
 
   return (
     <Stack
@@ -237,13 +227,21 @@ export default function AddCitizenIdPage() {
           </FileUpload.RootProvider>
         </Steps.Content>
 
-        <Steps.CompletedContent marginY="6">
-          <IconButton
-            variant="outline"
-            onClick={() => handleStep2(needModifyFile.acceptedFiles)}
-          >
-            <FaFileExcel />
-          </IconButton>
+        <Steps.CompletedContent marginY="10">
+          <Stack alignItems="center">
+            <Text fontWeight={"semibold"}>Đã thêm CCCD vào file</Text>
+            <Button
+              variant="outline"
+              onClick={() => getFileAfterModify(needModifyFile.acceptedFiles)}
+            >
+              <LuDownload /> Tải về (
+              <FormatByte
+                value={needModifyFile.acceptedFiles?.[0]?.size}
+                unitDisplay="short"
+              />
+              )
+            </Button>
+          </Stack>
         </Steps.CompletedContent>
 
         <Stack alignItems="center">

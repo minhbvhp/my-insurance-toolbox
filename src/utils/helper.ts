@@ -1,4 +1,4 @@
-import * as XLSX from "xlsx";
+import type { Worksheet } from "exceljs";
 
 export type AccountAndCitizen = {
   so_tai_khoan: string;
@@ -22,21 +22,25 @@ function normalizeText(value: string) {
     .replace(/[\u0300-\u036f]/g, "");
 }
 
-export function findColumnIndex(sheet: XLSX.Sheet, headerName: string) {
-  const range = XLSX.utils.decode_range(sheet["!ref"]!);
+export function findColumnIndex(
+  worksheet: Worksheet,
+  headerName: string
+): { col: number; row: number } | null {
   const target = normalizeText(headerName);
 
-  for (let R = range.s.r; R <= range.e.r; R++) {
-    for (let C = range.s.c; C <= range.e.c; C++) {
-      const cellAddress = XLSX.utils.encode_cell({ r: R, c: C });
-      const cell = sheet[cellAddress];
+  for (let r = 1; r <= worksheet.rowCount; r++) {
+    const row = worksheet.getRow(r);
+    for (let c = 1; c <= row.cellCount; c++) {
+      const cell = row.getCell(c);
+      if (!cell.value) continue;
 
-      if (!cell || cell.v == null) continue;
-
-      const cellValue = normalizeText(String(cell.v));
+      const cellValue = normalizeText(String(cell.value));
 
       if (cellValue === target) {
-        return { col: C, row: R };
+        return {
+          col: c,
+          row: r,
+        };
       }
     }
   }
@@ -45,19 +49,18 @@ export function findColumnIndex(sheet: XLSX.Sheet, headerName: string) {
 }
 
 export function extractColumnValues(
-  sheet: XLSX.Sheet,
+  worksheet: Worksheet,
   colIndex: number,
   startRow: number
 ) {
-  const range = XLSX.utils.decode_range(sheet["!ref"]!);
-  const results: any[] = [];
+  const results: string[] = [];
 
-  for (let R = startRow; R <= range.e.r; R++) {
-    const cellAddress = XLSX.utils.encode_cell({ r: R, c: colIndex });
-    const cell = sheet[cellAddress];
+  for (let r = startRow; r <= worksheet.rowCount; r++) {
+    const cell = worksheet.getRow(r).getCell(colIndex);
+    const value = cell.value;
 
-    if (cell && cell.v !== undefined && cell.v !== null && cell.v !== "") {
-      results.push(String(cell.v).trim());
+    if (value !== null && value !== undefined && value !== "") {
+      results.push(String(value).trim());
     } else {
       results.push("");
     }
@@ -66,20 +69,21 @@ export function extractColumnValues(
   return results;
 }
 
-export function extractAccountAndCitizen(sheet: XLSX.Sheet) {
-  const colTaiKhoan = findColumnIndex(sheet, "SỐ TÀI KHOẢN");
-  const colCCCD = findColumnIndex(sheet, "SỐ CCCD");
+export function extractAccountAndCitizen(worksheet: Worksheet) {
+  const colTaiKhoan = findColumnIndex(worksheet, "SỐ TÀI KHOẢN");
+  const colCCCD = findColumnIndex(worksheet, "SỐ CCCD");
 
   if (!colTaiKhoan || !colCCCD) {
     return [];
   }
 
   const listTaiKhoan = extractColumnValues(
-    sheet,
+    worksheet,
     colTaiKhoan.col,
     colTaiKhoan.row + 1
   );
-  const listCCCD = extractColumnValues(sheet, colCCCD.col, colCCCD.row + 1);
+
+  const listCCCD = extractColumnValues(worksheet, colCCCD.col, colCCCD.row + 1);
 
   const maxLen = Math.max(listTaiKhoan.length, listCCCD.length);
 
@@ -110,43 +114,31 @@ export function buildAccountMap(data: AccountAndCitizen[]) {
 }
 
 export function fillCitizenIdToSheet(
-  sheet: XLSX.Sheet,
+  worksheet: Worksheet,
   accountMap: Map<string, string>
 ) {
-  const colTaiKhoan = findColumnIndex(sheet, "SỐ TÀI KHOẢN");
-  const colCCCD = findColumnIndex(sheet, "SỐ CCCD");
+  const colTaiKhoan = findColumnIndex(worksheet, "SỐ TÀI KHOẢN");
+  const colCCCD = findColumnIndex(worksheet, "SỐ CCCD");
 
   if (!colTaiKhoan || !colCCCD) {
     throw new Error("Không tìm thấy cột SỐ TÀI KHOẢN hoặc SỐ CCCD");
   }
 
-  const range = XLSX.utils.decode_range(sheet["!ref"]!);
+  for (let r = colTaiKhoan.row + 1; r <= worksheet.rowCount; r++) {
+    const row = worksheet.getRow(r);
 
-  for (let R = colTaiKhoan.row + 1; R <= range.e.r; R++) {
-    const accCellAddr = XLSX.utils.encode_cell({
-      r: R,
-      c: colTaiKhoan.col,
-    });
+    const accCell = row.getCell(colTaiKhoan.col);
+    if (!accCell.value) continue;
 
-    const cccdCellAddr = XLSX.utils.encode_cell({
-      r: R,
-      c: colCCCD.col,
-    });
-
-    const accCell = sheet[accCellAddr];
-    if (!accCell || !accCell.v) continue;
-
-    const soTaiKhoan = String(accCell.v).trim();
+    const soTaiKhoan = String(accCell.value).trim();
     const soCCCD = accountMap.get(soTaiKhoan);
 
-    if (!soCCCD) continue;
+    const cccdCell = row.getCell(colCCCD.col);
 
-    // GHI CCCD VÀO Ô
-    sheet[cccdCellAddr] = {
-      t: "s",
-      v: soCCCD,
-    };
+    if (soCCCD) {
+      cccdCell.value = soCCCD;
+    } else {
+      cccdCell.value = "Không tìm thấy";
+    }
   }
-
-  return sheet;
 }
